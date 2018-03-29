@@ -2,11 +2,13 @@ import json
 import requests
 import unittest
 
+import time
+
 with open("../config.json") as json_data:
     config = json.load(json_data)
 
-host = config["host"]
-port = config["port"]
+host = str(config["host"])
+port = str(config["port"])
 url_create = 'http://' + host + ':' + port + '/api/session/create'
 url_load = 'http://' + host + ':' + port + '/api/session/load'
 url_renew = 'http://' + host + ':' + port + '/api/session/renew'
@@ -28,8 +30,8 @@ class MyTest(unittest.TestCase):
     def test_session_create(self):
         payload = {"userId": "test@test"}
         r = requests.post(url_create, data=json.dumps(payload), headers=headers)
-        MyTest.existing_session_id = r.text
-        self.assertNotEqual(MyTest.existing_session_id, "blank")
+        existing_session_id = r.text
+        self.assertNotEqual(existing_session_id, "blank")
 
     def test_session_load(self):
         r = requests.post(url_load, data=self.existing_session_id, headers=headers)
@@ -69,6 +71,24 @@ class MyTest(unittest.TestCase):
         response = r.json()
         success_false = {"success": False}
         self.assertEqual(response, success_false)
+
+    @unittest.skip("uncomment this line for session expire testing")
+    def test_session_expire(self):
+        payload = {"userId": "test@test"}
+        session_id = requests.post(url_create, data=json.dumps(payload), headers=headers).text
+        time.sleep(5)
+        response = requests.post(url_renew, data=session_id, headers=headers).json()
+        success_false = {"success": False}
+        self.assertEqual(response, success_false)
+
+    @unittest.skip("uncomment this line for session expire testing")
+    def test_load_expire(self):
+        payload = {"userId": "test@test"}
+        session_id = requests.post(url_create, data=json.dumps(payload), headers=headers).text
+        time.sleep(5)
+        response = requests.post(url_load, data=session_id, headers=headers).json()
+        success_false = {"userId": None}
+        self.assertEqual(success_false, response)
 
 
 if __name__ == '__main__':

@@ -129,9 +129,9 @@ class Dynamodb:
             return True
 
     def check_session_creation(self, creation_time):
-        session_expiry_time = datetime.datetime.now() - datetime.timedelta()
-        return creation_time > session_expiry_time.strftime('%Y-%m-%d %H:%M:%S')
+        date_back_given_time  = datetime.datetime.now() - datetime.timedelta(config["session_time"])
+        return creation_time > date_back_given_time .strftime('%Y-%m-%d %H:%M:%S')
 
     def check_session_last_use(self, last_used):
-        five_minutes_before_date_time = datetime.datetime.now() - datetime.timedelta(minutes=config["last_check_timer"])
-        return last_used > five_minutes_before_date_time.strftime('%Y-%m-%d %H:%M:%S')
+        date_back_given_time = datetime.datetime.now() - datetime.timedelta(config["last_check_timer"])
+        return last_used > date_back_given_time .strftime('%Y-%m-%d %H:%M:%S')

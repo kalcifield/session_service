@@ -5,6 +5,7 @@
   "region_name": "eu-central-1",
   "endpoint_url": "http://localhost:8000",
   "table_name": "user_session",
-  "session_time": 8,
-  "last_check_timer" : 5
+  "session_test_time":0.000034,
+  "session_time": 0.333333,
+  "last_check_timer" : 0.0035
 }
