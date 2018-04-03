@@ -17,6 +17,7 @@ url_delete = 'http://' + host + ':' + port + '/api/session/delete'
 headers = {'content-type': 'application/json'}
 
 
+
 class MyTest(unittest.TestCase):
     existing_session_id = "blank"
 

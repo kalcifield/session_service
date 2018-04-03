@@ -1,10 +1,10 @@
 {
   "port": 8081,
-  "host": "localhost",
+  "host": "0.0.0.0",
   "database": "dynamodb",
   "region_name": "eu-central-1",
   "endpoint_url": "http://localhost:8000",
-  "table_name": "user_session",
+  "table_name": "netinfo_sessions",
   "session_test_time":0.000034,
   "session_time": 0.333333,
   "last_check_timer" : 0.0035

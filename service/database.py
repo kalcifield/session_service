@@ -3,7 +3,6 @@ import json
 import boto3
 import datetime
 
-
 with open("../config.json") as json_data:
     config = json.load(json_data)
 
@@ -41,9 +40,14 @@ class Dynamodb:
                 ProvisionedThroughput={
                     'ReadCapacityUnits': 10,
                     'WriteCapacityUnits': 10
-                }
+                },
+                # TimeToLiveSpecification={
+                #     'AttributeName': 'TimeToLive',
+                #     'Enabled': 'TRUE'
+                # }
+
             )
-        self.table = self.dynamo_db.Table('user_session')
+        self.table = self.dynamo_db.Table(config["table_name"])
 
     def save_session(self, user_id, session_id):
         current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -129,11 +133,13 @@ class Dynamodb:
             return True
 
     def check_session_creation(self, creation_time):
-        date_back_given_time  = datetime.datetime.now() - datetime.timedelta(config["session_time"]) #config["last_check_timer"] for production
-        #config["session_test_time"] for testing
-        return creation_time > date_back_given_time .strftime('%Y-%m-%d %H:%M:%S')
+        date_back_given_time = datetime.datetime.now() - datetime.timedelta(
+            config["session_time"])  # config["last_check_timer"] for production
+        # config["session_test_time"] for testing
+        return creation_time > date_back_given_time.strftime('%Y-%m-%d %H:%M:%S')
 
     def check_session_last_use(self, last_used):
-        date_back_given_time = datetime.datetime.now() - datetime.timedelta(config["last_check_timer"]) #config["last_check_timer"] for production
-        #config["session_test_time"] for testing
-        return last_used > date_back_given_time .strftime('%Y-%m-%d %H:%M:%S')
+        date_back_given_time = datetime.datetime.now() - datetime.timedelta(
+            config["last_check_timer"])  # config["last_check_timer"] for production
+        # config["session_test_time"] for testing
+        return last_used > date_back_given_time.strftime('%Y-%m-%d %H:%M:%S')
